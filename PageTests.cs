@@ -11,6 +11,7 @@ public class PageTests : IDisposable
     public void Dispose()
         {
             _driver.Close();
+            _driver.Quit();
         }
 
     [Fact]
