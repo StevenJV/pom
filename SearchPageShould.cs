@@ -25,4 +25,9 @@ public class SearchPageShould : IDisposable
         output.WriteLine("resultText: {0}", resultText);
         Assert.Contains("Displaying results", resultText);
     }
+    [Fact]
+    public void DisplayMessageWhenSearchFails()
+    {
+        throw new NotImplementedException();
+    }
 }
