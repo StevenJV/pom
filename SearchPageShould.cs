@@ -22,12 +22,16 @@ public class SearchPageShould : IDisposable
         SearchPage searchPage = new SearchPage(_driver);
         searchPage.GoTo();
         string resultText = searchPage.ResultsCountDescription("testbash");
-        output.WriteLine("resultText: {0}", resultText);
+        output.WriteLine("resultText: '{0}'", resultText);
         Assert.Contains("Displaying results", resultText);
     }
     [Fact]
     public void DisplayMessageWhenSearchFails()
     {
-        throw new NotImplementedException();
+        SearchPage searchPage = new SearchPage(_driver);
+        searchPage.GoTo();
+        string resultText = searchPage.ResultsCountDescription("NotAGoodSearch");
+        output.WriteLine("resultText: '{0}'", resultText);
+        Assert.True(String.IsNullOrEmpty(resultText));
     }
 }

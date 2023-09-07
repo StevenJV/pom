@@ -11,15 +11,14 @@ namespace pom
         public SearchPage(IWebDriver driver)
         {
             _driver = driver;
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             PageFactory.InitElements(driver, this);
         }
 
         [FindsBy(How = How.Name, Using = "q")]
         private IWebElement _searchtxtbox = null!;
 
-        [FindsBy(How = How.ClassName, Using = "me-5")]
-        private IWebElement _resultsCount = null!;
+        private IWebElement _resultsBox = null!;
 
         public void GoTo()
         {
@@ -30,18 +29,22 @@ namespace pom
         {
             _searchtxtbox.SendKeys(searchText);
             _searchtxtbox.SendKeys(Keys.Return);
-            return _driver.WaitUntilVisible(By.ClassName("me-5"));
+            IWebElement cardContainer = _driver.WaitUntilVisible(By.ClassName("card-header"));
+            //FirstOrDefault from a list can get us null rather than the exception that a single FindElement would throw
+            return _driver.FindElements(By.ClassName("me-5")).ToList().FirstOrDefault();
         }
+
         public string ResultsCountDescription(string searchText)
         {
-            _resultsCount = Search(searchText);
-            string theText = _resultsCount.Text;
-            return theText;
+            _resultsBox = Search(searchText);
+            if (_resultsBox == null) return String.Empty;
+            return _resultsBox.Text;
         }
         public bool ResultsFound(string searchText)
         {
-            _resultsCount = Search(searchText);
-            string theText = _resultsCount.Text;
+            _resultsBox = Search(searchText);
+            if (_resultsBox == null) return false;
+            string theText = _resultsBox.Text;
             return (theText.Contains("Displaying results"));
         }
     }
