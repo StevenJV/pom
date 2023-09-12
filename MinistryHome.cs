@@ -2,12 +2,8 @@ using System;
 
 namespace pom
 {
-    public class MinistryHome
+    public class MinistryHome : PageBase
     {
-        private IWebDriver _driver;
-        private WebDriverWait wait;
-        private string test_url = "https://www.ministryoftesting.com/";
-
         [FindsBy(How = How.Name, Using = "q")]
         private IWebElement _searchtxtbox = null!;
 
@@ -19,6 +15,7 @@ namespace pom
             _driver = driver;
             wait = new WebDriverWait(driver, TimeSpan.FromMilliseconds(500));
             PageFactory.InitElements(driver, this);
+            full_test_uri = Path.Combine(test_url, test_page);
         }
 
         public void GoTo()

@@ -2,17 +2,17 @@ using System;
 
 namespace pom
 {
-    public class SearchPage
+    public class SearchPage : PageBase
     {
-        private IWebDriver _driver;
-        private WebDriverWait wait;
-        private string test_url = "https://www.ministryoftesting.com/search";
+
 
         public SearchPage(IWebDriver driver)
         {
             _driver = driver;
+            test_page = "search";
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             PageFactory.InitElements(driver, this);
+            full_test_uri = Path.Combine(test_url, test_page);
         }
 
         [FindsBy(How = How.Name, Using = "q")]
