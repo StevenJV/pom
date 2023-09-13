@@ -4,32 +4,30 @@ namespace pom
 {
     public class SearchPage : PageBase
     {
-
-
-        public SearchPage(IWebDriver driver)
+        public SearchPage(IWebDriver driver) : base(driver)
         {
             _driver = driver;
-            test_page = "search";
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            PageFactory.InitElements(driver, this);
-            full_test_uri = Path.Combine(test_url, test_page);
+            _urlPage = "search";
+            _wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
+            PageFactory.InitElements(_driver, this);
+            _url = Path.Combine(_urlBase, _urlPage);
         }
 
         [FindsBy(How = How.Name, Using = "q")]
-        private IWebElement _searchtxtbox = null!;
+        private readonly IWebElement _searchtxtbox = null!;
 
-        private IWebElement _resultsBox = null!;
+        private IWebElement? _resultsBox = null!;
 
         public void GoTo()
         {
-            _driver.Navigate().GoToUrl(test_url);
+            _driver.Navigate().GoToUrl(_urlBase);
         }
 
-        private IWebElement Search(string searchText)
+        private IWebElement? Search(string searchText)
         {
             _searchtxtbox.SendKeys(searchText);
             _searchtxtbox.SendKeys(Keys.Return);
-            IWebElement cardContainer = _driver.WaitUntilVisible(By.ClassName("card-header"));
+            if(_driver.WaitUntilVisible(By.ClassName("card-header")) == null) return null;
             //FirstOrDefault from a list can get us null rather than the exception that a single FindElement would throw
             return _driver.FindElements(By.ClassName("me-5")).ToList().FirstOrDefault();
         }
@@ -44,8 +42,7 @@ namespace pom
         {
             _resultsBox = Search(searchText);
             if (_resultsBox == null) return false;
-            string theText = _resultsBox.Text;
-            return (theText.Contains("Displaying results"));
+            return (_resultsBox.Text.Contains("Displaying results"));
         }
     }
 }
