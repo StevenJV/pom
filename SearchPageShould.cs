@@ -1,19 +1,12 @@
 namespace pom;
 
-public class SearchPageShould : IDisposable
+public class SearchPageShould : TestBase, IDisposable
 {
-    private IWebDriver _driver;
     private readonly ITestOutputHelper output;
 
     public SearchPageShould(ITestOutputHelper output)
     {
-        _driver = new FirefoxDriver();
         this.output = output;
-    }
-    public void Dispose()
-    {
-        _driver.Close();
-        _driver.Quit();
     }
 
     [Fact]
